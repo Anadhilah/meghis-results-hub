@@ -6,6 +6,9 @@ import { Users, Upload, BookOpen, Bell, Plus, Search, Building, GraduationCap, B
 import DepartmentManagement from './admin/DepartmentManagement';
 import ClassManagement from './admin/ClassManagement';
 import SubjectManagement from './admin/SubjectManagement';
+import ResultEntry from './admin/ResultEntry';
+import GradingSystem from './admin/GradingSystem';
+import AdminRoles from './admin/AdminRoles';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -55,6 +58,9 @@ const AdminDashboard = () => {
                 { id: 'subjects', name: 'Subjects', icon: Book },
                 { id: 'students', name: 'Students', icon: Users },
                 { id: 'results', name: 'Results', icon: BookOpen },
+                { id: 'result-entry', name: 'Result Entry', icon: Upload },
+                { id: 'grading', name: 'Grading System', icon: Bell },
+                { id: 'admin-roles', name: 'Admin Roles', icon: Bell },
                 { id: 'notifications', name: 'Notifications', icon: Bell }
               ].map(({ id, name, icon: Icon }) => (
                 <button
@@ -171,6 +177,15 @@ const AdminDashboard = () => {
 
         {/* Subjects Tab */}
         {activeTab === 'subjects' && <SubjectManagement />}
+
+        {/* Result Entry Tab */}
+        {activeTab === 'result-entry' && <ResultEntry />}
+
+        {/* Grading System Tab */}
+        {activeTab === 'grading' && <GradingSystem />}
+
+        {/* Admin Roles Tab */}
+        {activeTab === 'admin-roles' && <AdminRoles />}
 
         {/* Students Tab */}
         {activeTab === 'students' && (
