@@ -1,9 +1,11 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, Upload, BookOpen, Bell, Plus, Search } from 'lucide-react';
+import { Users, Upload, BookOpen, Bell, Plus, Search, Building, GraduationCap, Book } from 'lucide-react';
+import DepartmentManagement from './admin/DepartmentManagement';
+import ClassManagement from './admin/ClassManagement';
+import SubjectManagement from './admin/SubjectManagement';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -11,6 +13,8 @@ const AdminDashboard = () => {
   const stats = {
     totalStudents: 1247,
     totalClasses: 24,
+    totalDepartments: 5,
+    totalSubjects: 45,
     currentSemester: '2023/2024 - Semester 2',
     resultsUploaded: 856,
     pendingResults: 391
@@ -46,6 +50,9 @@ const AdminDashboard = () => {
             <nav className="-mb-px flex space-x-8">
               {[
                 { id: 'overview', name: 'Overview', icon: Users },
+                { id: 'departments', name: 'Departments', icon: Building },
+                { id: 'classes', name: 'Classes', icon: GraduationCap },
+                { id: 'subjects', name: 'Subjects', icon: Book },
                 { id: 'students', name: 'Students', icon: Users },
                 { id: 'results', name: 'Results', icon: BookOpen },
                 { id: 'notifications', name: 'Notifications', icon: Bell }
@@ -88,15 +95,15 @@ const AdminDashboard = () => {
               
               <Card className="shadow-md hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">{stats.resultsUploaded}</div>
-                  <div className="text-gray-600">Results Uploaded</div>
+                  <div className="text-3xl font-bold text-green-600 mb-2">{stats.totalDepartments}</div>
+                  <div className="text-gray-600">Departments</div>
                 </CardContent>
               </Card>
               
               <Card className="shadow-md hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
-                  <div className="text-3xl font-bold text-orange-600 mb-2">{stats.pendingResults}</div>
-                  <div className="text-gray-600">Pending Results</div>
+                  <div className="text-3xl font-bold text-purple-600 mb-2">{stats.totalSubjects}</div>
+                  <div className="text-gray-600">Subjects</div>
                 </CardContent>
               </Card>
             </div>
@@ -155,6 +162,15 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+
+        {/* Departments Tab */}
+        {activeTab === 'departments' && <DepartmentManagement />}
+
+        {/* Classes Tab */}
+        {activeTab === 'classes' && <ClassManagement />}
+
+        {/* Subjects Tab */}
+        {activeTab === 'subjects' && <SubjectManagement />}
 
         {/* Students Tab */}
         {activeTab === 'students' && (
