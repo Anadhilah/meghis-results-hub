@@ -1,4 +1,3 @@
-
 export interface Department {
   id: string;
   name: string;
@@ -38,11 +37,20 @@ export interface Student {
   id: string;
   name: string;
   studentId: string;
+  email?: string;
+  phone?: string;
+  parentEmail?: string;
+  parentPhone?: string;
   departmentId: string;
   programId: string;
   classId: string;
   form: 'Form 1' | 'Form 2' | 'Form 3';
   profilePhoto?: string;
+  dateOfBirth?: string;
+  address?: string;
+  guardianName?: string;
+  admissionDate: string;
+  status: 'active' | 'suspended' | 'graduated' | 'transferred';
 }
 
 export interface GradeScale {
@@ -104,4 +112,39 @@ export interface AdminUser {
 export interface AdminPermission {
   resource: string;
   actions: ('create' | 'read' | 'update' | 'delete')[];
+}
+
+export interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'result_published' | 'general' | 'urgent' | 'event';
+  recipientType: 'all_students' | 'specific_class' | 'specific_student' | 'parents';
+  recipientIds?: string[];
+  classIds?: string[];
+  createdBy: string;
+  createdAt: string;
+  scheduledFor?: string;
+  status: 'draft' | 'scheduled' | 'sent' | 'failed';
+  deliveryMethods: ('email' | 'sms' | 'in_app')[];
+}
+
+export interface Analytics {
+  id: string;
+  type: 'class_performance' | 'subject_performance' | 'student_performance' | 'department_performance';
+  period: string;
+  data: Record<string, any>;
+  generatedAt: string;
+  generatedBy: string;
+}
+
+export interface ResultPublication {
+  id: string;
+  classId: string;
+  semester: string;
+  publishedBy: string;
+  publishedAt: string;
+  notificationSent: boolean;
+  studentsNotified: string[];
+  status: 'published' | 'unpublished';
 }

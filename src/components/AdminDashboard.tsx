@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, Upload, BookOpen, Bell, Plus, Search, Building, GraduationCap, Book } from 'lucide-react';
+import { Users, Upload, BookOpen, Bell, Plus, Search, Building, GraduationCap, Book, Send, BarChart3, UserCheck } from 'lucide-react';
 import DepartmentManagement from './admin/DepartmentManagement';
 import ClassManagement from './admin/ClassManagement';
 import SubjectManagement from './admin/SubjectManagement';
 import ResultEntry from './admin/ResultEntry';
 import GradingSystem from './admin/GradingSystem';
 import AdminRoles from './admin/AdminRoles';
+import StudentManagement from './admin/StudentManagement';
+import ResultPublishing from './admin/ResultPublishing';
+import Analytics from './admin/Analytics';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -50,23 +53,24 @@ const AdminDashboard = () => {
         {/* Navigation Tabs */}
         <div className="mb-8">
           <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8">
+            <nav className="-mb-px flex space-x-8 overflow-x-auto">
               {[
                 { id: 'overview', name: 'Overview', icon: Users },
                 { id: 'departments', name: 'Departments', icon: Building },
                 { id: 'classes', name: 'Classes', icon: GraduationCap },
                 { id: 'subjects', name: 'Subjects', icon: Book },
-                { id: 'students', name: 'Students', icon: Users },
-                { id: 'results', name: 'Results', icon: BookOpen },
+                { id: 'students', name: 'Students', icon: UserCheck },
                 { id: 'result-entry', name: 'Result Entry', icon: Upload },
-                { id: 'grading', name: 'Grading System', icon: Bell },
-                { id: 'admin-roles', name: 'Admin Roles', icon: Bell },
+                { id: 'result-publishing', name: 'Publish Results', icon: Send },
+                { id: 'analytics', name: 'Analytics', icon: BarChart3 },
+                { id: 'grading', name: 'Grading System', icon: BookOpen },
+                { id: 'admin-roles', name: 'Admin Roles', icon: Users },
                 { id: 'notifications', name: 'Notifications', icon: Bell }
               ].map(({ id, name, icon: Icon }) => (
                 <button
                   key={id}
                   onClick={() => setActiveTab(id)}
-                  className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
+                  className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
                     activeTab === id
                       ? 'border-meghis-blue text-meghis-blue'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -180,6 +184,12 @@ const AdminDashboard = () => {
 
         {/* Result Entry Tab */}
         {activeTab === 'result-entry' && <ResultEntry />}
+
+        {/* Result Publishing Tab */}
+        {activeTab === 'result-publishing' && <ResultPublishing />}
+
+        {/* Analytics Tab */}
+        {activeTab === 'analytics' && <Analytics />}
 
         {/* Grading System Tab */}
         {activeTab === 'grading' && <GradingSystem />}
