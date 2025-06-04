@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -182,6 +183,9 @@ const AdminDashboard = () => {
         {/* Subjects Tab */}
         {activeTab === 'subjects' && <SubjectManagement />}
 
+        {/* Students Tab */}
+        {activeTab === 'students' && <StudentManagement />}
+
         {/* Result Entry Tab */}
         {activeTab === 'result-entry' && <ResultEntry />}
 
@@ -196,78 +200,6 @@ const AdminDashboard = () => {
 
         {/* Admin Roles Tab */}
         {activeTab === 'admin-roles' && <AdminRoles />}
-
-        {/* Students Tab */}
-        {activeTab === 'students' && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <div className="flex items-center space-x-4">
-                <Button className="meghis-gradient text-white">
-                  <Plus size={16} className="mr-2" />
-                  Add Student
-                </Button>
-                <Button variant="outline">
-                  <Upload size={16} className="mr-2" />
-                  Bulk Import
-                </Button>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Search size={16} className="text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search students..."
-                  className="border border-gray-300 rounded-lg px-4 py-2 w-64"
-                />
-              </div>
-            </div>
-
-            <Card className="shadow-lg border-0">
-              <CardHeader>
-                <CardTitle>Student Management</CardTitle>
-                <CardDescription>Manage student accounts and information</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <Users size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>Student management interface will be implemented here</p>
-                  <p className="text-sm">Features: Add, edit, delete students, manage classes</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Results Tab */}
-        {activeTab === 'results' && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <div className="flex items-center space-x-4">
-                <Button className="meghis-yellow-gradient text-white">
-                  <Upload size={16} className="mr-2" />
-                  Upload Results
-                </Button>
-                <Button variant="outline">
-                  <BookOpen size={16} className="mr-2" />
-                  Generate Reports
-                </Button>
-              </div>
-            </div>
-
-            <Card className="shadow-lg border-0">
-              <CardHeader>
-                <CardTitle>Results Management</CardTitle>
-                <CardDescription>Upload and manage student results</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <BookOpen size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>Results management interface will be implemented here</p>
-                  <p className="text-sm">Features: Upload individual/bulk results, generate reports</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
 
         {/* Notifications Tab */}
         {activeTab === 'notifications' && (

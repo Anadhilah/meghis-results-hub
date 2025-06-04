@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Plus, Search, Upload, Edit, Trash2, User, Mail, Phone } from 'lucide-react';
+import { Student } from '@/types/school';
 
 const StudentManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,17 +15,25 @@ const StudentManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
 
   // Mock data - in real app this would come from API
-  const students = [
+  const students: Student[] = [
     {
       id: '1',
       name: 'Sarah Johnson',
       studentId: 'STU001',
       email: 'sarah.johnson@email.com',
       phone: '+1234567890',
-      class: '12A',
-      department: 'Science',
-      status: 'active',
-      admissionDate: '2022-09-01'
+      parentEmail: 'parent1@email.com',
+      parentPhone: '+1234567899',
+      departmentId: '1',
+      programId: '1',
+      classId: '1',
+      form: 'Form 3',
+      profilePhoto: '',
+      dateOfBirth: '2005-03-15',
+      address: '123 Main St',
+      guardianName: 'John Johnson',
+      admissionDate: '2022-09-01',
+      status: 'active'
     },
     {
       id: '2',
@@ -32,10 +41,18 @@ const StudentManagement = () => {
       studentId: 'STU002',
       email: 'michael.chen@email.com',
       phone: '+1234567891',
-      class: '12B',
-      department: 'Science',
-      status: 'active',
-      admissionDate: '2022-09-01'
+      parentEmail: 'parent2@email.com',
+      parentPhone: '+1234567898',
+      departmentId: '1',
+      programId: '1',
+      classId: '2',
+      form: 'Form 3',
+      profilePhoto: '',
+      dateOfBirth: '2005-05-20',
+      address: '456 Oak Ave',
+      guardianName: 'Lisa Chen',
+      admissionDate: '2022-09-01',
+      status: 'active'
     },
     {
       id: '3',
@@ -43,10 +60,18 @@ const StudentManagement = () => {
       studentId: 'STU003',
       email: 'emily.davis@email.com',
       phone: '+1234567892',
-      class: '11A',
-      department: 'Arts',
-      status: 'suspended',
-      admissionDate: '2023-09-01'
+      parentEmail: 'parent3@email.com',
+      parentPhone: '+1234567897',
+      departmentId: '2',
+      programId: '3',
+      classId: '3',
+      form: 'Form 2',
+      profilePhoto: '',
+      dateOfBirth: '2006-01-10',
+      address: '789 Pine St',
+      guardianName: 'Robert Davis',
+      admissionDate: '2023-09-01',
+      status: 'suspended'
     }
   ];
 
@@ -60,10 +85,20 @@ const StudentManagement = () => {
     }
   };
 
+  const getClassLabel = (classId: string) => {
+    // Mock class mapping - in real app this would come from API
+    const classMap: { [key: string]: string } = {
+      '1': 'Form 3A',
+      '2': 'Form 3B',
+      '3': 'Form 2A'
+    };
+    return classMap[classId] || 'Unknown';
+  };
+
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          student.studentId.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesClass = selectedClass === 'all' || student.class === selectedClass;
+    const matchesClass = selectedClass === 'all' || student.classId === selectedClass;
     const matchesStatus = selectedStatus === 'all' || student.status === selectedStatus;
     
     return matchesSearch && matchesClass && matchesStatus;
@@ -96,9 +131,9 @@ const StudentManagement = () => {
                     <SelectValue placeholder="Select Class" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="12a">Form 12A</SelectItem>
-                    <SelectItem value="12b">Form 12B</SelectItem>
-                    <SelectItem value="11a">Form 11A</SelectItem>
+                    <SelectItem value="1">Form 3A</SelectItem>
+                    <SelectItem value="2">Form 3B</SelectItem>
+                    <SelectItem value="3">Form 2A</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button className="w-full meghis-gradient text-white">Add Student</Button>
@@ -133,9 +168,9 @@ const StudentManagement = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Classes</SelectItem>
-                <SelectItem value="12A">Form 12A</SelectItem>
-                <SelectItem value="12B">Form 12B</SelectItem>
-                <SelectItem value="11A">Form 11A</SelectItem>
+                <SelectItem value="1">Form 3A</SelectItem>
+                <SelectItem value="2">Form 3B</SelectItem>
+                <SelectItem value="3">Form 2A</SelectItem>
               </SelectContent>
             </Select>
 
@@ -200,7 +235,7 @@ const StudentManagement = () => {
                       </div>
                     </td>
                     <td className="text-center py-4 px-4">
-                      <Badge variant="outline">{student.class}</Badge>
+                      <Badge variant="outline">{getClassLabel(student.classId)}</Badge>
                     </td>
                     <td className="text-center py-4 px-4">
                       <Badge className={getStatusColor(student.status)}>
