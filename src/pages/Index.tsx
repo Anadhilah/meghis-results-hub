@@ -1,9 +1,10 @@
-
 import { useState } from 'react';
 import Header from '@/components/Header';
 import LoginForm from '@/components/LoginForm';
 import StudentDashboard from '@/components/StudentDashboard';
 import AdminDashboard from '@/components/AdminDashboard';
+import StudentSettings from '@/components/StudentSettings';
+import AdminSettings from '@/components/AdminSettings';
 
 // Mock student data
 const mockStudentData = {
@@ -32,6 +33,7 @@ const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [currentView, setCurrentView] = useState<'dashboard' | 'settings'>('dashboard');
 
   const handleLogin = (studentId: string, password: string, adminLogin = false) => {
     // In a real application, this would validate credentials against a backend
@@ -46,6 +48,7 @@ const Index = () => {
     setIsLoggedIn(false);
     setIsAdmin(false);
     setShowAdminLogin(false);
+    setCurrentView('dashboard');
     
     // In a real application, you would also:
     // - Clear JWT tokens from localStorage/sessionStorage
@@ -53,6 +56,14 @@ const Index = () => {
     // - Clear any cached user data
     
     console.log('User logged out successfully');
+  };
+
+  const handleSettingsClick = () => {
+    setCurrentView('settings');
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
   };
 
   if (!isLoggedIn) {
@@ -84,13 +95,30 @@ const Index = () => {
         studentName={isAdmin ? undefined : mockStudentData.name}
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
+        onSettingsClick={handleSettingsClick}
         isAdmin={isAdmin}
       />
       
-      {isAdmin ? (
-        <AdminDashboard />
+      {currentView === 'settings' ? (
+        <div className="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+          <div className="max-w-7xl mx-auto p-4">
+            <button
+              onClick={handleBackToDashboard}
+              className="mb-4 text-meghis-blue hover:text-blue-700 font-medium"
+            >
+              ← Back to Dashboard
+            </button>
+            {isAdmin ? <AdminSettings /> : <StudentSettings />}
+          </div>
+        </div>
       ) : (
-        <StudentDashboard studentData={mockStudentData} />
+        <>
+          {isAdmin ? (
+            <AdminDashboard />
+          ) : (
+            <StudentDashboard studentData={mockStudentData} />
+          )}
+        </>
       )}
     </div>
   );

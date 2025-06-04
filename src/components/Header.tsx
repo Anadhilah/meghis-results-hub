@@ -8,9 +8,10 @@ interface HeaderProps {
   isLoggedIn?: boolean;
   onLogout?: () => void;
   isAdmin?: boolean;
+  onSettingsClick?: () => void;
 }
 
-const Header = ({ studentName, isLoggedIn = false, onLogout, isAdmin = false }: HeaderProps) => {
+const Header = ({ studentName, isLoggedIn = false, onLogout, isAdmin = false, onSettingsClick }: HeaderProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -44,7 +45,13 @@ const Header = ({ studentName, isLoggedIn = false, onLogout, isAdmin = false }: 
               {showDropdown && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
                   <div className="py-2">
-                    <button className="flex items-center space-x-2 w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors">
+                    <button 
+                      onClick={() => {
+                        onSettingsClick?.();
+                        setShowDropdown(false);
+                      }}
+                      className="flex items-center space-x-2 w-full px-4 py-2 text-left hover:bg-gray-100 transition-colors"
+                    >
                       <Settings size={16} />
                       <span>Settings</span>
                     </button>
