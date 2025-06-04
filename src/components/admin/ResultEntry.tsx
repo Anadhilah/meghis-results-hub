@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,9 +32,39 @@ const ResultEntry = () => {
   ];
 
   const students: Student[] = [
-    { id: '1', name: 'John Doe', studentId: 'STU001', departmentId: '1', programId: '1', classId: '1', form: 'Form 1' },
-    { id: '2', name: 'Jane Smith', studentId: 'STU002', departmentId: '1', programId: '1', classId: '1', form: 'Form 1' },
-    { id: '3', name: 'Bob Johnson', studentId: 'STU003', departmentId: '2', programId: '3', classId: '2', form: 'Form 2' }
+    { 
+      id: '1', 
+      name: 'John Doe', 
+      studentId: 'STU001', 
+      departmentId: '1', 
+      programId: '1', 
+      classId: '1', 
+      form: 'Form 1',
+      admissionDate: '2023-09-01',
+      status: 'active'
+    },
+    { 
+      id: '2', 
+      name: 'Jane Smith', 
+      studentId: 'STU002', 
+      departmentId: '1', 
+      programId: '1', 
+      classId: '1', 
+      form: 'Form 1',
+      admissionDate: '2023-09-01',
+      status: 'active'
+    },
+    { 
+      id: '3', 
+      name: 'Bob Johnson', 
+      studentId: 'STU003', 
+      departmentId: '2', 
+      programId: '3', 
+      classId: '2', 
+      form: 'Form 2',
+      admissionDate: '2023-09-01',
+      status: 'active'
+    }
   ];
 
   const mockBulkUploads: BulkUpload[] = [
