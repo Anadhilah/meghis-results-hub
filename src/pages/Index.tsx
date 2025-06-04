@@ -42,9 +42,17 @@ const Index = () => {
   };
 
   const handleLogout = () => {
+    // Clear user session
     setIsLoggedIn(false);
     setIsAdmin(false);
     setShowAdminLogin(false);
+    
+    // In a real application, you would also:
+    // - Clear JWT tokens from localStorage/sessionStorage
+    // - Call logout API endpoint
+    // - Clear any cached user data
+    
+    console.log('User logged out successfully');
   };
 
   if (!isLoggedIn) {

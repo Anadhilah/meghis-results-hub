@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import AdminRoles from './admin/AdminRoles';
 import StudentManagement from './admin/StudentManagement';
 import ResultPublishing from './admin/ResultPublishing';
 import Analytics from './admin/Analytics';
+import AnnouncementManager from './admin/AnnouncementManager';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
                 { id: 'analytics', name: 'Analytics', icon: BarChart3 },
                 { id: 'grading', name: 'Grading System', icon: BookOpen },
                 { id: 'admin-roles', name: 'Admin Roles', icon: Users },
-                { id: 'notifications', name: 'Notifications', icon: Bell }
+                { id: 'announcements', name: 'Announcements', icon: Bell }
               ].map(({ id, name, icon: Icon }) => (
                 <button
                   key={id}
@@ -201,31 +201,8 @@ const AdminDashboard = () => {
         {/* Admin Roles Tab */}
         {activeTab === 'admin-roles' && <AdminRoles />}
 
-        {/* Notifications Tab */}
-        {activeTab === 'notifications' && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <Button className="meghis-gradient text-white">
-                <Bell size={16} className="mr-2" />
-                Send Notification
-              </Button>
-            </div>
-
-            <Card className="shadow-lg border-0">
-              <CardHeader>
-                <CardTitle>Notification Center</CardTitle>
-                <CardDescription>Send notifications to students and parents</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <Bell size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>Notification management interface will be implemented here</p>
-                  <p className="text-sm">Features: Send emails, SMS, in-app notifications</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+        {/* Announcements Tab */}
+        {activeTab === 'announcements' && <AnnouncementManager />}
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Download, User, Calendar, BookOpen } from 'lucide-react';
+import { Download, User, Calendar, BookOpen, TrendingUp } from 'lucide-react';
+import SemesterSelector from './SemesterSelector';
+import PerformanceChart from './PerformanceChart';
+import { generateResultPDF } from '@/services/pdfService';
 
 interface Subject {
   name: string;
@@ -30,7 +32,39 @@ interface StudentDashboardProps {
 }
 
 const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
-  const [selectedSemester, setSelectedSemester] = useState('Current Semester');
+  const [selectedSemester, setSelectedSemester] = useState(studentData.semester);
+
+  // Mock data for different semesters
+  const getSemesterData = (semester: string) => {
+    if (semester === studentData.semester) {
+      return studentData;
+    }
+    
+    // Mock previous semester data
+    return {
+      ...studentData,
+      semester,
+      subjects: studentData.subjects.map(subject => ({
+        ...subject,
+        score: Math.max(40, subject.score - Math.floor(Math.random() * 10)),
+        grade: subject.score > 80 ? 'A' : subject.score > 70 ? 'B' : subject.score > 60 ? 'C' : 'D'
+      })),
+      average: 82.5,
+      position: 5,
+      totalScore: 660
+    };
+  };
+
+  const currentData = getSemesterData(selectedSemester);
+
+  // Calculate class position based on average (mock calculation)
+  const calculatePosition = (average: number, totalStudents: number) => {
+    // Simple mock: higher average = better position
+    const positionEstimate = Math.max(1, Math.ceil(totalStudents - (average / 100) * totalStudents + 1));
+    return Math.min(positionEstimate, totalStudents);
+  };
+
+  const position = calculatePosition(currentData.average, currentData.totalStudents);
 
   const getGradeColor = (grade: string) => {
     switch (grade) {
@@ -44,8 +78,10 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
   };
 
   const handleDownloadResult = () => {
-    // This would trigger PDF download in a real implementation
-    console.log('Downloading result slip...');
+    generateResultPDF({
+      ...currentData,
+      position
+    });
   };
 
   return (
@@ -59,27 +95,33 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
                 <User size={40} className="text-white" />
               </div>
               <div className="text-center sm:text-left">
-                <CardTitle className="text-2xl font-bold">{studentData.name}</CardTitle>
+                <CardTitle className="text-2xl font-bold">{currentData.name}</CardTitle>
                 <CardDescription className="text-blue-100 text-lg">
-                  Student ID: {studentData.studentId} | Class: {studentData.class}
+                  Student ID: {currentData.studentId} | Class: {currentData.class}
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
         </Card>
 
+        {/* Semester Selection */}
+        <SemesterSelector 
+          currentSemester={selectedSemester}
+          onSemesterChange={setSelectedSemester}
+        />
+
         {/* Results Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="text-center shadow-md hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-meghis-blue mb-2">{studentData.totalScore}</div>
+              <div className="text-3xl font-bold text-meghis-blue mb-2">{currentData.totalScore}</div>
               <div className="text-gray-600">Total Score</div>
             </CardContent>
           </Card>
           
           <Card className="text-center shadow-md hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-meghis-yellow mb-2">{studentData.average.toFixed(1)}%</div>
+              <div className="text-3xl font-bold text-meghis-yellow mb-2">{currentData.average.toFixed(1)}%</div>
               <div className="text-gray-600">Average</div>
             </CardContent>
           </Card>
@@ -87,7 +129,7 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
           <Card className="text-center shadow-md hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
               <div className="text-3xl font-bold text-purple-600 mb-2">
-                {studentData.position}/{studentData.totalStudents}
+                {position}/{currentData.totalStudents}
               </div>
               <div className="text-gray-600">Class Position</div>
             </CardContent>
@@ -97,34 +139,20 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
             <CardContent className="p-6">
               <Badge 
                 className={`text-lg px-4 py-2 ${
-                  studentData.status === 'PASS' 
+                  currentData.status === 'PASS' 
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-red-100 text-red-800'
                 }`}
               >
-                {studentData.status}
+                {currentData.status}
               </Badge>
               <div className="text-gray-600 mt-2">Status</div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Semester Selection and Actions */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <div className="flex items-center gap-4">
-            <Calendar size={20} className="text-meghis-blue" />
-            <select 
-              className="border border-gray-300 rounded-lg px-4 py-2 bg-white"
-              value={selectedSemester}
-              onChange={(e) => setSelectedSemester(e.target.value)}
-            >
-              <option>Current Semester</option>
-              <option>Previous Semester</option>
-              <option>2023/2024 - Semester 1</option>
-              <option>2022/2023 - Semester 2</option>
-            </select>
-          </div>
-          
+        {/* Download Action */}
+        <div className="flex justify-end mb-6">
           <Button 
             onClick={handleDownloadResult}
             className="meghis-yellow-gradient hover:opacity-90 text-white"
@@ -134,12 +162,30 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
           </Button>
         </div>
 
+        {/* Performance Charts */}
+        <div className="mb-8">
+          <Card className="shadow-lg border-0">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <TrendingUp size={24} className="text-meghis-blue" />
+                Performance Analytics
+              </CardTitle>
+              <CardDescription>
+                Visual representation of your academic performance
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <PerformanceChart subjects={currentData.subjects} />
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Subject Results */}
-        <Card className="shadow-lg border-0">
+        <Card className="shadow-lg border-0 mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
               <BookOpen size={24} className="text-meghis-blue" />
-              Subject Results - {studentData.semester}
+              Subject Results - {selectedSemester}
             </CardTitle>
             <CardDescription>
               Detailed breakdown of your performance in each subject
@@ -157,7 +203,7 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {studentData.subjects.map((subject, index) => (
+                  {currentData.subjects.map((subject, index) => (
                     <tr 
                       key={index} 
                       className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
@@ -181,7 +227,7 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
         </Card>
 
         {/* Performance Insights */}
-        <Card className="mt-8 shadow-lg border-0">
+        <Card className="shadow-lg border-0">
           <CardHeader>
             <CardTitle className="text-xl text-meghis-blue">Performance Insights</CardTitle>
           </CardHeader>
@@ -190,7 +236,7 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-meghis-blue mb-2">Strongest Subjects</h4>
                 <ul className="space-y-1">
-                  {studentData.subjects
+                  {currentData.subjects
                     .filter(s => s.score >= 80)
                     .map((subject, index) => (
                       <li key={index} className="text-sm">
@@ -203,7 +249,7 @@ const StudentDashboard = ({ studentData }: StudentDashboardProps) => {
               <div className="bg-yellow-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-meghis-yellow mb-2">Areas for Improvement</h4>
                 <ul className="space-y-1">
-                  {studentData.subjects
+                  {currentData.subjects
                     .filter(s => s.score < 70)
                     .map((subject, index) => (
                       <li key={index} className="text-sm">
